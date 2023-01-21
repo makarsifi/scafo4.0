@@ -1,0 +1,16 @@
+.form-results-img {
+    display: none;
+}
+
+.form-results-text {
+    display: none;
+}
+
+body {
+    font-size: 19px !important;
+}
+
+.form-text{
+   color: #0f5593 !important; 
+   font-size: 19px !important;
+}
