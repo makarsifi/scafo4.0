@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script src="{{ url_for('static', filename='js/socket.io.js') }}"></script>
+<script src="{{ url_for('static', filename='js/monitoring.js') }}"></script>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Preview</h6>
+    </div>
+    <div class="card-body">
+        <img src="{{ url_for('video_feed') }}" class="mb-3" width="100%">
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Monitoring</h6>
+    </div>
+    <div class="card-body">
+        <form class="form-ajax" id="frmMonitor" action="{{ url_for('detect_shifting') }}" method="post">
+            <button type="submit" class="btn btn-primary w-100">
+                <span class="text text-uppercase">Start Monitoring</span>
+            </buttsocketioon>
+            <div id="monitor-status-bar" class="form-results-text alert alert-info"></div>
+        </form>
+
+        <div id="bumps-result" class="card card-body d-none">
+            <div id="description"></div>
+            <div class="form-results-img">
+                <img src="about:blank" width="100%">
+            </div>
+        </div>
+
+        <div id="shifting-result" class="card card-body mt-3 d-none">
+            <div id="description"></div>
+            <div class="form-results-img">
+                <img src="about:blank" width="100%">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

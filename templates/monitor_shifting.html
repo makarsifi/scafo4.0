@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Preview</h6>
+    </div>
+    <div class="card-body">
+        <img src="{{ url_for('video_feed') }}" class="mb-3" width="100%">
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Monitor Shifting</h6>
+    </div>
+    <div class="card-body">
+        <form class="form-ajax" action="{{ url_for('detect_shifting') }}" method="post">
+            <button type="submit" class="btn btn-primary w-100 mb-3 mt-3">
+                <span class="text text-uppercase">Monitor</span>
+            </button>
+            <div class="form-results-img">
+                <div class="d-flex justify-content-between"> 
+                    <img src="about:blank" width="48%">
+                    <img src="about:blank" width="48%">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

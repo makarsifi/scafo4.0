@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script src="{{ url_for('static', filename='js/setup.js') }}"></script>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">1. Positioning</h6>
+    </div>
+    <div class="card-body">
+        Place the pattern projector 4 meters away from the metal plate.
+        <br />
+        Place the camera 2 meters on the right of the projector at a 45° angle as shown below:
+        <img class="my-3" src="{{ url_for('static', filename='img/camera-position.png') }}" />
+        <br/>Do not move the devices during the setup and monitoring phases.
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">2. Calibration</h6>
+    </div>
+    <div class="card-body">
+        <img src="{{ url_for('video_feed') }}" class="mb-3" width="100%">
+        <form class="form-ajax" action="{{ url_for('project_pattern') }}" method="post">
+            <div class="mb-3">
+                <label for="vs" class="form-label">Vertical bars width</label>
+                <div class="d-flex justify-content-between">
+                    <div class="col-11 p-0"><input type="range" id="vs" name="vs" class="form-range" min="0" max="20"
+                            step="1" value="0"></div>
+                    <div class="p-0 text-primary"><span id="vs-label">0</span> px</div>
+                </div>
+                <div class="form-text">
+                    Project the bars then adjust the focus and exposure of the camera to capture the best resolution.
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">3. ROI Delimitation</h6>
+    </div>
+    <div class="card-body">
+        <form class="form-ajax" action="{{ url_for('store_distances') }}" method="post">
+            Measure the distances between the Blue LEDs and insert them in cm. Start with A the top left LED moving clockwise.
+            <div class="row mb-3 mt-2">
+                <label for="AB" class="col-1 col-form-label">AB</label>
+                <div class="col-4">
+                    <input type="text" id="AB" name="AB" class="form-control" value="">
+                </div>
+
+                <div class="col-2"></div>
+
+                <label for="BC" class="col-1 col-form-label">BC</label>
+                <div class="col-4">
+                    <input type="text" id="BC" name="BC" class="form-control" value="">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="CD" class="col-1 col-form-label">CD</label>
+                <div class="col-4">
+                    <input type="text" id="CD" name="CD" class="form-control" value="">
+                </div>
+
+                <div class="col-2"></div>
+
+                <label for="DA" class="col-1 col-form-label">DA</label>
+                <div class="col-4">
+                    <input type="text" id="DA" name="DA" class="form-control" value="">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                <span class="text text-uppercase">Store distances</span>
+            </button>
+            <div class=" form-results-text alert alert-info"></div>
+        </form>
+
+        <form class="form-ajax" action="{{ url_for('detect_roi') }}" method="post">
+            <button type="submit" class="btn btn-primary w-100 mt-3">
+                <span class="text text-uppercase">Detect ROI</span>
+            </button>
+            <div class="form-text">
+                Turn on the Blue LEDs.    
+            </div>
+            <div class="form-results-img">
+                <img src="about:blank" width="100%">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">4. Baseline</h6>
+    </div>
+    <div class="card-body">
+        
+        <form class="form-ajax" action="{{ url_for('capture_baseline') }}" method="post">
+            <button type="submit" class="btn btn-primary w-100">
+                <span class="text text-uppercase">Capture Baseline Image</span>
+            </button>
+            <div class="form-text">
+                Blue LEDs off, Green LEDs on, then capture the baseline image. 
+            </div>
+            <div class="form-results-img">
+                <img src="about:blank" width="100%">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">5. Noise Evaluation</h6>
+    </div>
+    <div class="card-body">
+        <form class="form-ajax" action="{{ url_for('noise_evaluation') }}" method="post">
+            <button type="submit" class="btn btn-primary w-100">
+                <span class="text text-uppercase">Evaluate T</span>
+            </button>
+            <div class="form-results-img">
+                <img src="about:blank" width="100%">
+            </div>
+        </form>
+
+        <form class="form-ajax" action="{{ url_for('store_T') }}" method="post">
+            <div class="mb-3 mt-3">
+                <label for="T" class="col-form-label">Noise Threshold</label>
+                <input type="text" id="T" name="T" class="form-control" value="0">
+                <div class="form-text">Choose the value of <b>x</b> where <b>y = 0</b></div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+                <span class="text text-uppercase">Store Threshold</span>
+            </button>
+            <div class=" form-results-text alert alert-info"></div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">6. Capture Bumps</h6>
+    </div>
+    <div class="card-body">
+        <form class="form-ajax" action="{{ url_for('store_bumps_dimensions') }}" method="post">
+            <div class="mb-3">
+                <label for="dimensions" class="form-label">Bumps Dimensions</label>
+                <input type="text" id="dimensions" name="dimensions" class="form-control">
+                <div class="form-text">
+                    Enter the fake bumps' height and diameter in mm using the format h<sub>1</sub>,d<sub>1</sub>;h<sub>2</sub>,d<sub>1</sub>; 
+                    <i>e.g. 11,75;19,55;24,49...</i></div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+                <span class="text text-uppercase">Store Dimensions</span>
+            </button>
+            <div class=" form-results-text alert alert-info"></div>
+        </form>
+
+        
+        <form class="form-ajax mt-5" action="{{ url_for('capture_bumps') }}" method="post">
+            <div class="mb-3">
+                <input type="hidden" id="direction" name="direction" value="ltr" />
+                <button type="submit" class="btn btn-primary w-100">
+                    <span class="text text-uppercase">Capture Bumps LTR</span>
+                </button>
+                <div class="form-text">Position the artificial bumps by volume order from left to right and capture an image.</div>
+            </div>
+            <div class="form-results-img">
+                <img src="about:blank" width="100%">
+            </div>
+        </form>
+
+        <form class="form-ajax mt-3" action="{{ url_for('capture_bumps') }}" method="post">
+            <div class="mb-3">
+                <input type="hidden" id="direction" name="direction" value="rtl" />
+                <button type="submit" class="btn btn-primary w-100">
+                    <span class="text text-uppercase">Capture Bumps RTL</span>
+                </button>
+                <div class="form-text">Position the artificial bumps by volume order from right to left and capture an image.</div>
+            </div>
+            <div class="form-results-img">
+                <img src="about:blank" width="100%">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">7. Detect Bumps</h6>
+    </div>
+    <div class="card-body">
+        <form class="form-ajax" action="{{ url_for('detect_bumps') }}" method="post">
+            <div class="mb-3">
+                <label for="blur_T" class="form-label">Detection threshold</label>
+                <div class="d-flex justify-content-between">
+                    <div class="col-11 p-0"><input type="range" id="blur_T" name="blur_T" class="form-range" min="0" max="60" step="5" value="0"></div>
+                    <div class="p-0 text-primary"><span id="blur_T-label">0</span></div>
+                </div>
+                <div class="form-text">Adjust the threshold so only the inserted bumps are clearly detected.</div>
+            </div>
+            <div class="form-results-img">
+                <div class="d-flex justify-content-between"> 
+                    <img src="about:blank" width="48%">
+                    <img src="about:blank" width="48%">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">8. Evaluate Bumps</h6>
+    </div>
+    <div class="card-body">
+        <form class="form-ajax mb-3" action="{{ url_for('evaluate_bumps') }}" method="post">
+            <button type="submit" class="btn btn-primary w-100">
+                <span class="text text-uppercase">Draw Similarity plot</span>
+            </button>
+            <div class="form-results-img">
+                <img src="about:blank" width="100%">
+            </div>
+        </form>
+        When the depth evaluation is complete, remove the bumps.
+    </div>
+</div>
+
+{% endblock content %}
